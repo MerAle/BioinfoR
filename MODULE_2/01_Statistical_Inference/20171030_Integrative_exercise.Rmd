@@ -1,9 +1,10 @@
 ---
-title: "Title"
+title: "Statistical inference"
 author: "Ruth Gómez Graciani"
-date: "27 de octubre de 2017"
+date: "30 de octubre de 2017"
 output: html_document
 ---
+
 _Introduction_
 
 _Specify the biological question you are asking._
@@ -74,46 +75,96 @@ Power analysis
 _Do the experiment._
 
 * Arrange data*
+```{r}
+
+# 1. Exploratory data analysis (apply descriptive statistics and graphs for one o more 
+#  variables) of non-trivial variables of the genome table. 
+link <- 'http://mscbioinformatics.uab.cat/base/documents/bioinformaticsintranet1718/summary_human_genome2015_10_18D22_6.txt'
+
+header<-read.table(link, nrows = 1, stringsAsFactors = F)
+
+# there is a missing column name, as we can see in https://www.ncbi.nlm.nih.gov/genome/51?genome_assembly_id=214366
+t<-read.table(link, skip = 1 , stringsAsFactors = F)
+colnames(t)<-c(  as.character(header[1:4]), "INSDC", as.character(header[5:12]))
+
+# Also, the last row has a typo
+t[26,2:13]<-c(as.character(t[26,3:13]), as.character(t[27,1]))
+t<-t[1:26,]
+
+# The variables are transformed to numeric
+t[,6:13]<-apply(t[,6:13], 2, function(x){
+  x<-gsub(",","",x)
+  as.numeric(x)
+  })
+
+# Add column OMIM diseases
+disease<-read.table("/media/ubuntu/BIOPROJECT/BIOINFORMATICS/MODULE_2/01_Statistical_Inference/OMIM")
+colnames(disease)<-c('Name', 'N.diseases')
+t<- merge(t, disease, all= T)
+
+```
 
 _Examine the data to see if it meets the assumptions of the statistical test you chose (primarily normality and homoscedasticity for tests of measurement variables). If it doesn't, choose a more appropriate test._
 
 * Descriptive analysis *
 
+```{r}
+# Univariate analysis in continuous variables (height and weight)
+
+library(Weighted.Desc.Stat)
+
+gensize<-sum(as.numeric(t$`Size_(Mb)`))
+t$Rel_size = t$`Size_(Mb)`/gensize
+sapply(t[6:13], summary)
+apply(t[6:13], 2, function(x){
+  w.mean(x[which(is.na(x)== FALSE)], t[which(is.na(x)== FALSE),"Rel_size"])
+})
+
+t$Genes_per_Mb<-t$Gene/t$`Size_(Mb)`
+summary(t$Genes_per_Mb[1:24])
+t$Pseudogene_per_Mb<-t$Pseudogene/t$`Size_(Mb)`
+summary(t$Pseudogene_per_Mb[1:24])
+t$ratio_gene_pseud=t$Genes_per_Mb/t$Pseudogene_per_Mb
+summary(t$ratio_gene_pseud[1:24])
+
+boxplot(t$ratio_gene_pseud)
+library(ggplot2)
+library(gridExtra)
+require(reshape2)
+
+ggplot(data = melt(t[1:24,15:18]), aes(x=factor(1), y=value)) + 
+  geom_boxplot(aes(fill=variable))+
+  facet_wrap(.~variable,  scales = 'free')+
+  xlab("")+
+  theme(axis.text.x=element_blank())
+  
+
+```
+
 _Apply the statistical test you chose, and interpret the results._
 
+```{r}
 
+t$test <- t$N.diseases / t$Gene
+anova(lm(N.diseases ~ Name+Gene, data = t))
+t-test
+sum(t$N.diseases, na.rm = T)
+aov
+
+
+kruskal.test(t$Pseudogene, as.factor(t$Name))
+
+plot(t$`Size_(Mb)`, t$N.diseases)
+
+```
 * Kruskal walis *
 
 _Communicate your results effectively, usually with a graph or table._
 
 * Graph *
 
-
+Exon bases table source:
 http://seqanswers.com/forums/showthread.php?t=5298
 
-Total Bases Exon Bases
-chr1 249250621 8079409
-chr2 243199373 5781424
-chr3 198022430 4706998
-chr4 191154276 3364332
-chr5 180915260 3820351
-chr6 171115067 4241245
-chr7 159138663 4049692
-chr8 146364022 2909471
-chr9 141213431 3430407
-chr10 135534747 3398919
-chr11 135006516 4439924
-chr12 133851895 4144621
-chr13 115169878 1655075
-chr14 107349540 2665222
-chr15 102531392 2897969
-chr16 90354753 3248662
-chr17 81195210 4348983
-chr18 78077248 1377184
-chr19 59128983 4500567
-chr20 63025520 2034342
-chr21 48129895 888164
-chr22 51304566 1888002
-chrX 155270560 2951340
-chrY 59373566 271506
-chrM 16571 11925 
+Source NCBI:
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3116565/
