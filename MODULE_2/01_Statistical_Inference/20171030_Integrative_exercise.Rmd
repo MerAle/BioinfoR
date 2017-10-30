@@ -5,6 +5,7 @@ date: "30 de octubre de 2017"
 output: html_document
 ---
 
+
 _Introduction_
 
 _Specify the biological question you are asking._
@@ -51,12 +52,19 @@ METHOD
 Correct by chunk size?
 Correct by number of appearances in chromosome?
 
-4148(clinical basis) cs_molecular_basis_exists:TRUE
-4000 mutation (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) )))
-148 not mutation (cs_molecular_basis_exists:TRUE) AND NOT (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) )))
+
+<!-- 4148(clinical basis) cs_molecular_basis_exists:TRUE -->
+<!-- 4000 mutation (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) ))) -->
+<!-- 148 not mutation (cs_molecular_basis_exists:TRUE) AND NOT (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) ))) -->
+<!-- c(1,) -->
+
+(tx_molecular_genetics_exists:TRUE) AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial)
+
+ chromosome_group:A AND tx_molecular_genetics_exists:TRUE AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial)
 
 all_entries
 
+ 
  * Arrange data*
  * Test for all diseases controlling by size and number of genes *
  * Test for mutational diseases controlling by number of genes *
@@ -77,7 +85,8 @@ _Do the experiment._
 * Arrange data*
 ```{r}
 
-# 1. Exploratory data analysis (apply descriptive statistics and graphs for one o more 
+
+# BASIC TABLE
 #  variables) of non-trivial variables of the genome table. 
 link <- 'http://mscbioinformatics.uab.cat/base/documents/bioinformaticsintranet1718/summary_human_genome2015_10_18D22_6.txt'
 
@@ -97,10 +106,20 @@ t[,6:13]<-apply(t[,6:13], 2, function(x){
   as.numeric(x)
   })
 
+# DISEASES
+t$Number_Diseases<-c(1638,1038,898,646,749,955,774,585,622,612,997,861,308,538,486,675,963,243,1035,427,172,374,848,54, NA, NA)
+
+# EXON
+Basepairs<-read.table('Data/Exon_bases',skip=1, sep = ' ')
+colnames(Basepairs)<-c('Name', 'Total_Bases', 'Exon_Bases')
+Basepairs$Name<-sub('chr', '', Basepairs$Name)
+t<-merge(t, Basepairs)
 # Add column OMIM diseases
-disease<-read.table("/media/ubuntu/BIOPROJECT/BIOINFORMATICS/MODULE_2/01_Statistical_Inference/OMIM")
-colnames(disease)<-c('Name', 'N.diseases')
-t<- merge(t, disease, all= T)
+# disease<-read.table("/media/ubuntu/BIOPROJECT/BIOINFORMATICS/MODULE_2/01_Statistical_Inference/OMIM")
+# colnames(disease)<-c('Name', 'N.diseases')
+# t<- merge(t, disease, all= T)
+
+
 
 ```
 
@@ -111,32 +130,32 @@ _Examine the data to see if it meets the assumptions of the statistical test you
 ```{r}
 # Univariate analysis in continuous variables (height and weight)
 
-library(Weighted.Desc.Stat)
-
-gensize<-sum(as.numeric(t$`Size_(Mb)`))
-t$Rel_size = t$`Size_(Mb)`/gensize
-sapply(t[6:13], summary)
-apply(t[6:13], 2, function(x){
-  w.mean(x[which(is.na(x)== FALSE)], t[which(is.na(x)== FALSE),"Rel_size"])
-})
-
-t$Genes_per_Mb<-t$Gene/t$`Size_(Mb)`
-summary(t$Genes_per_Mb[1:24])
-t$Pseudogene_per_Mb<-t$Pseudogene/t$`Size_(Mb)`
-summary(t$Pseudogene_per_Mb[1:24])
-t$ratio_gene_pseud=t$Genes_per_Mb/t$Pseudogene_per_Mb
-summary(t$ratio_gene_pseud[1:24])
-
-boxplot(t$ratio_gene_pseud)
-library(ggplot2)
-library(gridExtra)
-require(reshape2)
-
-ggplot(data = melt(t[1:24,15:18]), aes(x=factor(1), y=value)) + 
-  geom_boxplot(aes(fill=variable))+
-  facet_wrap(.~variable,  scales = 'free')+
-  xlab("")+
-  theme(axis.text.x=element_blank())
+# library(Weighted.Desc.Stat)
+# 
+# gensize<-sum(as.numeric(t$`Size_(Mb)`))
+# t$Rel_size = t$`Size_(Mb)`/gensize
+# sapply(t[6:13], summary)
+# apply(t[6:13], 2, function(x){
+#   w.mean(x[which(is.na(x)== FALSE)], t[which(is.na(x)== FALSE),"Rel_size"])
+# })
+# 
+# t$Genes_per_Mb<-t$Gene/t$`Size_(Mb)`
+# summary(t$Genes_per_Mb[1:24])
+# t$Pseudogene_per_Mb<-t$Pseudogene/t$`Size_(Mb)`
+# summary(t$Pseudogene_per_Mb[1:24])
+# t$ratio_gene_pseud=t$Genes_per_Mb/t$Pseudogene_per_Mb
+# summary(t$ratio_gene_pseud[1:24])
+# 
+# boxplot(t$ratio_gene_pseud)
+# library(ggplot2)
+# library(gridExtra)
+# require(reshape2)
+# 
+# ggplot(data = melt(t[1:24,15:18]), aes(x=factor(1), y=value)) + 
+#   geom_boxplot(aes(fill=variable))+
+#   facet_wrap(.~variable,  scales = 'free')+
+#   xlab("")+
+#   theme(axis.text.x=element_blank())
   
 
 ```
@@ -144,18 +163,33 @@ ggplot(data = melt(t[1:24,15:18]), aes(x=factor(1), y=value)) +
 _Apply the statistical test you chose, and interpret the results._
 
 ```{r}
+Expected_total<-sum(t$Number_Diseases)/sum(t$Gene)
+t$Expected_probs<-(t$Gene*Expected_total)/sum(t$Number_Diseases)
 
-t$test <- t$N.diseases / t$Gene
-anova(lm(N.diseases ~ Name+Gene, data = t))
-t-test
-sum(t$N.diseases, na.rm = T)
-aov
+chisq.test(t$Number_Diseases, t$Expected_probs, simulate.p.value = T)
 
 
-kruskal.test(t$Pseudogene, as.factor(t$Name))
+###
 
-plot(t$`Size_(Mb)`, t$N.diseases)
+library(pwr)
 
+# P0<-t$Expected_probs
+P0<-t$Gene/sum(t$Gene)
+P1<- t$Number_Diseases/sum(t$Number_Diseases)
+
+effect.size <- ES.w1(P0, P1)  
+
+degrees <- length(P0) - 1
+
+pwr.chisq.test(
+               w=effect.size, 
+               N=578,            # Total number of observations
+               df=degrees, 
+               power=NULL,        # 1 minus Type II probability
+               sig.level=0.05)    # Type I probability
+
+cor.test(t$Gene, t$Number_Diseases)
+plot(t$Gene, t$Number_Diseases)
 ```
 * Kruskal walis *
 
@@ -163,7 +197,7 @@ _Communicate your results effectively, usually with a graph or table._
 
 * Graph *
 
-Exon bases table source:
+Exon bases table source: HG19
 http://seqanswers.com/forums/showthread.php?t=5298
 
 Source NCBI:
