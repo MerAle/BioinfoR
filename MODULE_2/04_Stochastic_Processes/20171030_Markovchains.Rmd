@@ -1,0 +1,58 @@
+---
+title: "Markov chains exercises"
+author: "Ruth Gómez Graciani"
+date: "30 de octubre de 2017"
+output: html_document
+---
+1- Download the genome of the Zaire Ebola virus 1995 (AY354458.1) in a FASTA file.
+```{r}
+library(seqinr)
+Ebola<-read.fasta('~/Documents/GITHUB/MODULE_2/04_Stochastic_Processes/Data/AY354458.1')
+```
+2- Calculate the frequency of each nucleotide and draw a Bar Plot. Which nucleotide is more frequent?
+```{r}
+library (ggplot2)
+Count<-as.data.frame(count(Ebola[[1]], 1, freq=T))
+colnames(Count)<-c('Nucleotide', 'Frequency')
+p<-ggplot(Count,aes( x = Nucleotide, y = Frequency))
+p+geom_bar(stat = 'identity', width = 0.5)+ggtitle('Frequency of nucleotides')
+
+
+```
+
+3- Calculate the GC content and the AT content.
+```{r}
+
+gccont<-GC(Ebola[[1]])
+atcont<-1-gccont
+```
+
+4- Do a sliding window analysis of the GC content, that is, to study the variation in GC content within the genome sequence:
+- calculate the GC content of chunks with length 200 (window size=200)
+- plot the resulting frequencies (to do this, use the loop command for (i in 1:n) { })
+
+```{r}
+library(zoo)
+
+allGC<-rollapply(Ebola[[1]],width=500,by=500,FUN = GC)
+allGC<-as.data.frame(allGC)
+allGC$Window = as.numeric(rownames(allGC))
+g<-ggplot(allGC, aes(x =Window, y =allGC))
+g+geom_line()+ggtitle('GC content by windows')
+
+```
+
+5- Generate a random DNA sequence of length 1000 using a multinomial model in which the probabilities pA, pC, pG, and pT are set equal to their respective fractions in the Zaire Ebola virus.
+6- Calculate the number of occurrences of the dinucleotides for the Zaire Ebola virus. Which are over or under-represented?
+7- Calculate the number of occurrences of the dinucleotides for the sequence generated in 5. Which are over or under-represented? Compare the results with those of 6.
+8- Calculate ρGAT for the Zaire Ebola virus.
+9- Do a sliding window analysis of ρCG using several window sizes. For each window size draw a plot line.
+10-Consider a Markov chain with a probability transition matrix described in the slice 21, corresponding to CpG islands (+). Calculate the limiting probabilities.
+```{r}
+PTM<-matrix(c(0.180,0.171,0.161,0.079,0.274,0.368,0.339,0.355,0.426,0.274,0.375,0.384,0.120,0.187,0.125,0.182),4,4, dimnames = list(c('a','c','g','t'),c('a','c','g','t')))
+
+PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM%*%PTM
+
+
+```
+11-Generate a random DNA sequence of length 1000 using a Markov chain model with the probability transition matrix considered in 10, and the initial probability given by its limiting distribution.
