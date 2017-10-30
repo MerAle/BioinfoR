@@ -1,0 +1,56 @@
+---
+title: "Untitled"
+author: "Ruth Gómez Graciani"
+date: "26 de octubre de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library (seqinr)
+
+FAS<-read.fasta('/media/masterbio/BIOPROJECT/BIOINFORMATICS/MODULE_2/04_Stochastic_Processes/sequence.fasta')
+Den<-FAS[[1]]
+Zik<-FAS[[2]]
+count(Den,2)
+count(Zik,2)
+length(Den)
+length(Zik)
+count(Den, 1)
+count(Zik, 1)
+GC(Den)
+GC(Zik)
+# rho(Den)
+# rho(Zik)
+Data<-as.data.frame(zscore(Den, modele = "codon"))
+Data$Virus<-rep("Dengue")
+
+Data2<-as.data.frame(zscore(Zik, modele = "codon"))
+Data2$Virus<-rep("Zika")
+
+Table<-rbind(Data, Data2)
+zscore(Zik, modele = "base")
+
+Table2<-merge(Data, Data2, by = "Var1")
+colnames(Table2)<-c("Dimers", "Dengue", "d", "Zika", "z")
+Table2$d<-Table2$z<-NULL
+Table2$Distance <- abs(Table2$Dengue-Table2$Zika)
+library(reshape2)
+T<-melt(Table2)
+T$Group<-c(rep(1,32), rep(2,16))
+
+library(ggplot2)
+library(gridExtra)
+library(viridis)
+p<-ggplot(T)+geom_bar(aes(x = Dimers, y = value, fill = variable),stat = "identity", position = "dodge")+ facet_grid(Group~.,scales = "free" )+scale_fill_manual(values = c("#39568CFF", "#55C667FF", "#440154FF" ))
+p
+
+
+# PROVES
+# +geom_text(aes(x = Table2$Var1, y = rep(12.5, 16), label = Table2$Distance))
+# 
+# p<-ggplot()+geom_bar(data = T[which(T$variable %in% c("Dengue", "Zika")), ],aes(x = Dimers, y = value, fill = variable),stat = "identity", position = "dodge")
+# d<- ggplot()+geom_bar(data = T[which(T$variable %in% c("Distance")), ],aes(x = Dimers, y = value, fill = variable),stat = "identity", position = "dodge")
+# 
+
+
+```
