@@ -1,0 +1,26 @@
+january 1 winter
+
+february 2 winter
+
+march 3 spring
+
+april 4 spring
+
+may 5 spring
+
+june 6 summer
+
+july 7 summer
+
+august 8 summer
+
+september 9 autumn
+
+october 10 autumn
+
+november 11 autumn
+
+december 12 winter
+
+
+

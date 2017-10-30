@@ -1,0 +1,119 @@
+---
+title: "Title"
+author: "Ruth Gómez Graciani"
+date: "27 de octubre de 2017"
+output: html_document
+---
+_Introduction_
+
+_Specify the biological question you are asking._
+
+Among the causes of the countless diseases that humans can suffer, genetic causes are ones of the most concerning because they are usually treatable but not fixable/curable and they can be transmitted to our offspring. However, genetic factors of diseases can vary from slight predispositions to totally letal mutations and rearrangements that lead to miscarriages even before the pregnancy is noticeable. 
+
+This extremely deleterious mutations are hardly ever detected nor reported.
+
+
+Assuming that there are differences in the essentiality of the genes (since the same mutation can be more or less severe deppending on the gene that it affects), we expect that the important genes are distributed randomly across the chromosomes, and the same can be applied to the less essential genes, as well as the mutations. Therefore, the source chromosome of a genetic disease is expected to depend only on the number of genes that can have a mutation in that chromosome. 
+
+
+Why we are counting genes and not space
+##
+
+Are diseases evenly distributed across the chromosomes?
+
+The null hipothesis regarding this question is that the number of diseases that a chromosome can be related to depends on the number of genes that ir contains, and the alternate hipothesis is that there are some disease-prone chromosomes. In statistical terms, these two hipothesis can be expressed as H0: all chromosomes are related to a number of diseases that depends exclusively on their number of genes and H1: some chromosmes have more reported diseases than the expected for their number of genes. 
+
+<!-- _Put the question in the form of a biological null hypothesis and alternate hypothesis._ -->
+
+<!-- H0: Todos los cromosomas tienen un numero aleatorio de enfermedades en función de su densidad génica y/o tamaño -->
+<!-- H1: el factor 'cromosoma' también afectal número de enfermedades, y no solo la densidad génica o el tamaño -->
+<!-- _Put the question in the form of a statistical null hypothesis and alternate hypothesis._ -->
+
+<!-- H0: el número de enfermedades por gen está homogéneamente distribuido entre los cromosomas -->
+<!-- h1: hay algunos cromosomas que tienen más enfermedades por gen de lo esperado -->
+
+_Variables selection_
+
+Number of diseases - discrete measure (separated by chromosomes)
+Number of genes - discrete measure (Separated by chromosomes)
+Cromosomes - nominal/ categories
+
+_Design an experiment that controls or randomizes the confounding variables._
+
+The population that will be studied
+Enfermedades:
+IDEAL FORMAT: Number of gene diseases, number of chromosomal diseases, for every chromosome (Mit and Unkown are excluded)
+SOURCE: Disease database (OMIM) https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383985/
+WHY OMIM (PROS): It has updated and curated descriptions of human genes and phenotypes and the relationships between them,  genome coordinate searching and thesaurus-enhanced search term options. Source material for OMIM is the peer-reviewed biomedical literature. 
+CONS in OMIM
+METHOD
+Correct by chunk size?
+Correct by number of appearances in chromosome?
+
+4148(clinical basis) cs_molecular_basis_exists:TRUE
+4000 mutation (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) )))
+148 not mutation (cs_molecular_basis_exists:TRUE) AND NOT (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) )))
+
+all_entries
+
+ * Arrange data*
+ * Test for all diseases controlling by size and number of genes *
+ * Test for mutational diseases controlling by number of genes *
+ * Test for structural diseases controlling by size (and number of genes?) *
+ * Statistical treatment  *
+ 
+_Based on the number of variables, the kinds of variables, the expected fit to the parametric assumptions, and the hypothesis to be tested, choose the best statistical test to use._
+
+Anovas or ancovas are not suitable because I only have one measure per group. A Kruskall-Wallis? Regression?
+
+
+_If possible, do a power analysis to determine a good sample size for the experiment._
+
+Power analysis
+
+_Do the experiment._
+
+* Arrange data*
+
+_Examine the data to see if it meets the assumptions of the statistical test you chose (primarily normality and homoscedasticity for tests of measurement variables). If it doesn't, choose a more appropriate test._
+
+* Descriptive analysis *
+
+_Apply the statistical test you chose, and interpret the results._
+
+
+* Kruskal walis *
+
+_Communicate your results effectively, usually with a graph or table._
+
+* Graph *
+
+
+http://seqanswers.com/forums/showthread.php?t=5298
+
+Total Bases Exon Bases
+chr1 249250621 8079409
+chr2 243199373 5781424
+chr3 198022430 4706998
+chr4 191154276 3364332
+chr5 180915260 3820351
+chr6 171115067 4241245
+chr7 159138663 4049692
+chr8 146364022 2909471
+chr9 141213431 3430407
+chr10 135534747 3398919
+chr11 135006516 4439924
+chr12 133851895 4144621
+chr13 115169878 1655075
+chr14 107349540 2665222
+chr15 102531392 2897969
+chr16 90354753 3248662
+chr17 81195210 4348983
+chr18 78077248 1377184
+chr19 59128983 4500567
+chr20 63025520 2034342
+chr21 48129895 888164
+chr22 51304566 1888002
+chrX 155270560 2951340
+chrY 59373566 271506
+chrM 16571 11925 

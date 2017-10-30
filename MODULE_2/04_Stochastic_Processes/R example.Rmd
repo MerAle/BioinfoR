@@ -1,0 +1,44 @@
+---
+title: "Untitled"
+author: "Ruth Gómez Graciani"
+date: "26 de octubre de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library (seqinr)
+
+FAS<-read.fasta('/media/masterbio/BIOPROJECT/BIOINFORMATICS/MODULE_2/04_Stochastic_Processes/sequence.fasta')
+Den<-FAS[[1]]
+Zik<-FAS[[2]]
+count(Den,2)
+count(Zik,2)
+length(Den)
+length(Zik)
+count(Den, 1)
+count(Zik, 1)
+GC(Den)
+GC(Zik)
+# rho(Den)
+# rho(Zik)
+Data<-as.data.frame(zscore(Den, modele = "codon"))
+Data$Virus<-rep("Dengue")
+
+Data2<-as.data.frame(zscore(Zik, modele = "codon"))
+Data2$Virus<-rep("Zika")
+
+Table<-rbind(Data, Data2)
+zscore(Zik, modele = "base")
+
+Table2<-merge(Data, Data2, by = "Var1")
+colnames(Table2)<-c("Dimers", "Dengue", "d", "Zika", "z")
+Table2$d<-Table2$z<-NULL
+Table2$Distance <- Table2$Dengue-Table2$Zika
+
+
+library(ggplot2)
+
+p<-ggplot(Table,aes(x = Var1, y = Freq, fill = Virus ))
+p+geom_bar(stat = "identity", position = "dodge")
+
+```

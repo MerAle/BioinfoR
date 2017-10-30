@@ -1,237 +1,287 @@
 # encoding: utf-8
 
-# ALGORITHMS IN PYTHON
+# # ALGORITHMS IN PYTHON
 
 import sys
 
-#------------------------------------------------------------------
+# #------------------------------------------------------------------
 
-# BASIC ALGORITHMS ON STRINGS, LISTS, TUPLES AND DICITIONARIES
+# # BASIC ALGORITHMS ON STRINGS, LISTS, TUPLES AND DICITIONARIES
 
-## Reverse & Reverse-Complement string
+# ## Reverse & Reverse-Complement string
 
-### Compute the reverse of a sequence
+# ### Compute the reverse of a sequence
 
-def rev( sequence ) :
-  reverse = ""
-	i = len( sequence ) - 1
+# def rev( sequence ) :
+#   reverse = ""
+# 	i = len( sequence ) - 1
 
-	while i >= 0 :
-		reverse += sequence[i] 
-		i = i - 1
+# 	while i >= 0 :
+# 		reverse += sequence[i] 
+# 		i = i - 1
 	
-  return reverse
+#   return reverse
 
-def rev2( sequence ) :
-	reverse = ""
+# def rev2( sequence ) :
+# 	reverse = ""
 	
-  for p in range( len( sequence ) - 1, -1, -1 ) :
-		reverse += sequence[p]
+#   for p in range( len( sequence ) - 1, -1, -1 ) :
+# 		reverse += sequence[p]
 	
-  return reverse
+#   return reverse
 
-# "" . join( sequence[i] for i in range( len( sequence ) - 1, -1, -1 ) )
+# # "" . join( sequence[i] for i in range( len( sequence ) - 1, -1, -1 ) )
 
-### Compute the reverse complement of a sequence
+# ### Compute the reverse complement of a sequence
 
-def rc( sequence) :
-	codeDict = {
-		'A' : 'T', 
-		'T' : 'A', 
-		'G' : 'C', 
-		'C' : 'G', 
-		'N' : 'N' 
-	}
+# def rc( sequence) :
+# 	codeDict = {
+# 		'A' : 'T', 
+# 		'T' : 'A', 
+# 		'G' : 'C', 
+# 		'C' : 'G', 
+# 		'N' : 'N' 
+# 	}
 	
-	# reverse = ""
-	# for p in range( len( sequence ) - 1, -1, -1 ) :
-	# 	reverse += codeDict[ sequence[i] ]
+# 	# reverse = ""
+# 	# for p in range( len( sequence ) - 1, -1, -1 ) :
+# 	# 	reverse += codeDict[ sequence[i] ]
 
-	return "" . join( codeDict[ sequence[i] ] for i in range( len( sequence ) - 1, -1, -1 ) )
+# 	return "" . join( codeDict[ sequence[i] ] for i in range( len( sequence ) - 1, -1, -1 ) )
 
-## Hard-trim & Quality-trim of FASTQ sequences
+# ## Hard-trim & Quality-trim of FASTQ sequences
 
-### Return tuple of sequence and qualities hard-trimmed to the left and right
+# ### Return tuple of sequence and qualities hard-trimmed to the left and right
 
-def hardtrim( sequence, qualities, left, right ) :
-  sequence = sequence[ left : len( sequence ) - right ]
-  qualities = qualities[ left : len( qualities ) - right ]
-  return ( sequence, qualities )
+# def hardtrim( sequence, qualities, left, right ) :
+#   sequence = sequence[ left : len( sequence ) - right ]
+#   qualities = qualities[ left : len( qualities ) - right ]
+#   return ( sequence, qualities )
 
-### Returnt tuple of seqeunce and qualities quality-trimmed 
+# ### Returnt tuple of seqeunce and qualities quality-trimmed 
 
-def quality_trim( sequence, qualities, min_qscore ) :
- 	for p in range( len( qualities ) - 1, -1, -1 ) :
-		if ( ord( qualities[p] ) - 33 < min_qscore ) :
-			qualities = qualities[ : p ]
-			sequence = sequence[ : p ]
-		else :
-			break	
-	return (sequence, qualities)
+# def quality_trim( sequence, qualities, min_qscore ) :
+#  	for p in range( len( qualities ) - 1, -1, -1 ) :
+# 		if ( ord( qualities[p] ) - 33 < min_qscore ) :
+# 			qualities = qualities[ : p ]
+# 			sequence = sequence[ : p ]
+# 		else :
+# 			break	
+# 	return (sequence, qualities)
 
-def quality_trim2( sequence, qualities, min_qscore ) :
-  left, right = 0, 0
+# def quality_trim2( sequence, qualities, min_qscore ) :
+#   left, right = 0, 0
   
-  for p in range( len( qualities ) - 1, -1, -1 ) :
-    if ( ord( qualities[p] ) - 33 < min_qscore ) :
-      right += 1
-    else:
-      break
+#   for p in range( len( qualities ) - 1, -1, -1 ) :
+#     if ( ord( qualities[p] ) - 33 < min_qscore ) :
+#       right += 1
+#     else:
+#       break
 
-  for p in range( 0, len( qualities ) ) :
-    if ( ord( qualities[p] ) - 33 < min_qscore ) :
-      left += 1
-    else :
-      break
+#   for p in range( 0, len( qualities ) ) :
+#     if ( ord( qualities[p] ) - 33 < min_qscore ) :
+#       left += 1
+#     else :
+#       break
 
-  return  hardtrim( sequence, qualities, left, right )
+#   return  hardtrim( sequence, qualities, left, right )
 
-# ALSO, we can count the right trim and after that call hardtrim
+# # ALSO, we can count the right trim and after that call hardtrim
 
-## Exact string matching
+# ## Exact string matching
 
-### Assess if two strings are exactly the same
+# ### Assess if two strings are exactly the same
 
-def exact_match( pattern, text ) :
-  return pattern == text # DONT OvERTHINK!!!!
+# def exact_match( pattern, text ) :
+#   return pattern == text # DONT OvERTHINK!!!!
 
-### Find a pattern (fragment) in a database (reference genome)
+# ### Find a pattern (fragment) in a database (reference genome)
 
-def all_exact_matches( pattern, reference ) :
-  result = []
+# def all_exact_matches( pattern, reference ) :
+#   result = []
   
-  for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
- 	  if exact_match( pattern, reference[ i : i + len( pattern ) ] ) :
- 	    result += [i]
+#   for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
+#  	  if exact_match( pattern, reference[ i : i + len( pattern ) ] ) :
+#  	    result += [i]
 
-  return result
+#   return result
 
-# ----------------------------------------------------------------
+# # ----------------------------------------------------------------
 
-# CASES OF USE
+# # CASES OF USE
 
-# -----------------------------------------------------------------
+# # -----------------------------------------------------------------
 
-# GREEDY ALGORITHMS
+# # GREEDY ALGORITHMS
 
-## Sequence pairwaise mismatch distance
+# ## Sequence pairwaise mismatch distance
 
-### Hamming distance between two strings
+# ### Hamming distance between two strings
 
-def hamming_distance( pattern, text ) :
-	if len( pattern ) != len( text ) : return float( 'inf' )
-	result = 0
+# def hamming_distance( pattern, text ) :
+# 	if len( pattern ) != len( text ) : return float( 'inf' )
+# 	result = 0
 	
-  for i in range( 0, len( pattern ) ) : 
-	  if pattern[i] != text[i] :
-		  result += 1
+#   for i in range( 0, len( pattern ) ) : 
+# 	  if pattern[i] != text[i] :
+# 		  result += 1
 	
-  return result
+#   return result
 
-### Given a pattern and a database, list the positions of the database with a hamming distance below a threshold
+# ### Given a pattern and a database, list the positions of the database with a hamming distance below a threshold
 
-def all_hamming_matches( pattern, reference, threshold ) :
-  result = []
+# def all_hamming_matches( pattern, reference, threshold ) :
+#   result = []
   
-  for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
- 	  if hamming_distance( pattern, reference[ i : i + len( pattern ) ] ) <= threshold :
- 	    result += [i]
+#   for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
+#  	  if hamming_distance( pattern, reference[ i : i + len( pattern ) ] ) <= threshold :
+#  	    result += [i]
   
-  return result
+#   return result
 
-## Profiling DNA coverage and transitions/transversions
+# ## Profiling DNA coverage and transitions/transversions
 
-### Find the coverage of a reference from a list of patterns that have to be located in the best position
+# ### Find the coverage of a reference from a list of patterns that have to be located in the best position
 
-def coverage( patternlist, reference ) : 
-	result = ""
-	dicc = {}
+# def coverage( patternlist, reference ) : 
+# 	result = ""
+# 	dicc = {}
 
-	for i in range(0, len( reference ) ) :
-		dicc[i] = 0
+# 	for i in range(0, len( reference ) ) :
+# 		dicc[i] = 0
 	
-  for pattern	in patternlist :
-		bestmatch = len( pattern )
-		bestfirstposition = ""
+#   for pattern	in patternlist :
+# 		bestmatch = len( pattern )
+# 		bestfirstposition = ""
 		
-    for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
-			newmatch = hamming_distance( pattern, reference[ i : i + len( pattern ) ] )
+#     for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
+# 			newmatch = hamming_distance( pattern, reference[ i : i + len( pattern ) ] )
 	 	
-    	if newmatch < bestmatch :
-	 			bestmatch = newmatch
-	 			bestfirstposition = i	 			
+#     	if newmatch < bestmatch :
+# 	 			bestmatch = newmatch
+# 	 			bestfirstposition = i	 			
 		
-    for i in range( bestfirstposition, bestfirstposition + len( pattern ) ) :
-	 		dicc[i] += 1
+#     for i in range( bestfirstposition, bestfirstposition + len( pattern ) ) :
+# 	 		dicc[i] += 1
 	
-  for k in dicc : 
-		result += str( dicc[k] )
+#   for k in dicc : 
+# 		result += str( dicc[k] )
 	
-  return result
+#   return result
 
-# ----------------------------------------------------------------
+# # ----------------------------------------------------------------
 
-# CASES OF USE
+# # CASES OF USE
 
-## CASE OF USE 4: Naive greedy snp caller
+# ## CASE OF USE 4: Naive greedy snp caller
 
-def SNP_caller( patternlist, reference ) : 
-	result = ""
-	dicc = {}
+# def SNP_caller( patternlist, reference ) : 
+# 	result = ""
+# 	dicc = {}
 
-	for i in range( 0, len( reference ) ) :
-		dicc[i] = [ reference[i] ]
+# 	for i in range( 0, len( reference ) ) :
+# 		dicc[i] = [ reference[i] ]
 	
-  for pattern	in patternlist :
-		bestmatch = len( pattern )
-		bestfirstposition = ""
+#   for pattern	in patternlist :
+# 		bestmatch = len( pattern )
+# 		bestfirstposition = ""
 		
-    for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
-			newmatch = hamming_distance( pattern, reference[ i : i + len( pattern ) ] )
+#     for i in range( 0, len( reference ) - len( pattern ) + 1 ) :
+# 			newmatch = hamming_distance( pattern, reference[ i : i + len( pattern ) ] )
 	 		
-      if newmatch < bestmatch :
-	 			bestmatch = newmatch
-	 			bestfirstposition = i	 			
+#       if newmatch < bestmatch :
+# 	 			bestmatch = newmatch
+# 	 			bestfirstposition = i	 			
 		
-    for i in range( bestfirstposition, bestfirstposition + len( pattern ) ) :
-	 		dicc[i] += pattern[ i - bestfirstposition ]
+#     for i in range( bestfirstposition, bestfirstposition + len( pattern ) ) :
+# 	 		dicc[i] += pattern[ i - bestfirstposition ]
 	
-  finaldicc = []
+#   finaldicc = []
 
-	for k in dicc :
-		bol = True
+# 	for k in dicc :
+# 		bol = True
 		
-    if len( dicc[k] ) == 1 : 
-      bol = False
-		elif ( len( dicc[k] ) == 2 ) & ( dicc[k][0] == dicc[k][1] ) :
-      bol = False
-		else:
-			for n in dicc[k][2:] :
-				if n != dicc[k][1] :
-					bol = False
-			if dicc[k][1] == dicc[k][0] :
-				bol = False
+#     if len( dicc[k] ) == 1 : 
+#       bol = False
+# 		elif ( len( dicc[k] ) == 2 ) & ( dicc[k][0] == dicc[k][1] ) :
+#       bol = False
+# 		else:
+# 			for n in dicc[k][2:] :
+# 				if n != dicc[k][1] :
+# 					bol = False
+# 			if dicc[k][1] == dicc[k][0] :
+# 				bol = False
 		
-    if bol == True:
-      finaldicc += [k]
+#     if bol == True:
+#       finaldicc += [k]
 	
-  return finaldicc
+#   return finaldicc
 
 #---------------------------------------------------------------
 
-reference = "GABGGGGGGABCDEFGMIGUELGGGGWP"
-patternlist = ['ABCP', 'BCPE', 'CPEFGM', 'PEFGMI' ]
+# reference = "GABGGGGGGABCDEFGMIGUELGGGGWP"
+# patternlist = ['ABCP', 'BCPE', 'CPEFGM', 'PEFGMI' ]
 
-print SNP_caller(patternlist,reference)
-
-
+# print SNP_caller(patternlist,reference)
 
 
+# ----------------------
+# DIVIDE AND CONQUER class
+# import sys
+
+chromosomes={
+	
+	'1' : 1,
+	'2' : 2,
+	'3' : 3,
+	'4' : 4,
+	'5' : 5,
+	'6' : 6,
+	'7' : 7,
+	'8' : 8,
+	'9' : 9,
+	'10' : 10,
+	'11' : 11,
+	'12' : 12,
+	'13' : 13,
+	'14' : 14,
+	'15' : 15,
+	'16' : 16,
+	'17' : 17,
+	'18' : 18,
+	'19' : 19,
+	'20' : 20,
+	'21' : 21,
+	'22' : 22,
+	'X' : 23,
+	'Y' : 24
+}
+
+if(len(sys.argv) > 1):
+	f = open(sys.argv[1], "r")
+	VCF = f.read()
+
+VCF = VCF.split('\n')
+VCF = VCF[ 0:  len(VCF)-1 ]
+
+order = {}
+
+for i in VCF:
+	t= i.split()
+	order[str(chromosomes[t[0][3:len(t[0])]])+","+t[1]] = [i]
+
+print order
+
+ls =  order.keys() 
+for i in range(0,len(ls)):
+	ls[i] = ls[i].split(',')
+	ls[i][0], ls[i][1] = int(ls[i][0]), int(ls[i][1]) 
 
 
+ls_1 = sorted(ls, key=lambda x: (x[0], x[1]))
 
-
-
+for i in ls_1:
+	print order[str(i[0])+","+str(i[1])]
 
 
 

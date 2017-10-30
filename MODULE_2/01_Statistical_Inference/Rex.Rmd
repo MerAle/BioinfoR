@@ -1,0 +1,302 @@
+---
+title: "Statistical inference"
+author: "Ruth Gómez"
+date: "October 21, 2017"
+output: html_document
+---
+
+## Random probability distribution
+
+10.Calculate the binomial  probability  (n=4,m=12,p=0.2),  where  m=number of repetitions, n and (m-n)  are the number  of favorable (i.e., a) and unfavorable  results  (b)  and p the probability  of favorable results.
+
+```{r }
+dbinom(4, 12, 0.2)
+
+```
+
+11.Simulate  a binomial sample  m=200  y and p=0.6. 
+
+```{r}
+# Sample of 1
+rbinom(1, 200, 0.6)
+# Sample of 100
+rbinom(100, 200, 0.6)
+```
+
+12.Coliform bacteria are randomly  distributed  in the Ebro river at an average concentration  of 1 per  20cc of water. If we draw from the river a test tube  containing 10cc of water, what is the chance that the sample  contains exactly 2 coliform bacteria?
+
+```{r}
+dpois(2, 0.5)
+```
+
+13.Calculate the cumulative  probability  of a Poisson distribution  (k≤3,λ=3).
+```{r}
+ppois(3, 3)
+```
+
+14.Calculate the cumulative  probability  of a Poisson distribution(k>1,λ=2).
+```{r}
+ppois(1, 2, lower=F)
+```
+
+15.Simulate a sample m=200 of a Poisson distribution with λ = 4.3
+```{r}
+rpois(200, 4.3)
+```
+
+16.The number of crossovers per  meiosis and chromosome  (or chromosome  region)  is usually  approximated to a Poisson distribution  of probability. Relate the meiotic crossover with the following symbols  of the Poisson distribution:
+k = *number of crossovers in a mesiosis and chromosome*
+λ = *mean of crossovers per meiosis and cromosome*
+What does f(4;5) mean?
+*The probability of 4 crossovers in a chromosome and meiosis when the mean are 5 crossovers.*
+Is there some sites more likely  than others to be involved  in a crossover? *Yes*
+If the function  of probability  of a chromosome  is f (k,  6), which  the probability  function of a region  whose size is a third  of the chromosome? *f(k, 2)*
+
+17.If the number  of new mutations  for each replication  of a genome  is 6, which is the probability  of a replicated  genome  has 0 mutations.
+```{r}
+dpois(0, 6)
+```
+18.If the number  of crossover per meiosis in a chromosome  is 4, calculate the probability of more than  two crossover at a given  meiosis  for the chromosome.
+```{r}
+ppois(2, 4, lower=F)
+```
+19.In a human  population with zero population  growth the government  proposes aiding large families.If the budget allows only help 5.5% of families,  how many children  must have the families to receive the aid?
+```{r}
+
+qpois(1-0.055, 2)
+
+```
+*5 children or more*
+20.It is known  that the probability  of a nucleotide  incorrectly  assigned  in a read of a sequencing  technology  X is 0.001. If a million  reads  are made,  what is the probability that the number  of erroneous  reads  is greater  than 1500? 
+```{r}
+# A million reads, multiplied by the probability of wrong reads = mean number of wrong reads
+lambda<-1000000*0.001
+ppois(1500, lambda, lower =F )
+```
+21.Obtain the z value leaving  an upper area = 7%.
+```{r}
+qpois(0.93,0.001)
+```
+
+22.Calculate p (-155 ≤ x ≤ 185) for a distribution N(174.3,7.6).
+```{r}
+pnorm(185, 174.3, 7.6)-pnorm(-155, 174.3, 7.6)
+```
+
+23.Calculate p (-0.9 ≤z≤0.9). 
+```{r}
+pnorm(0.9)-pnorm(-0.9)
+```
+
+24.Calculate the area (-2.43 ≤ x ≤1.81)
+```{r}
+pnorm(-2.43)-pnorm(1.81)
+```
+25.Find  the L value that fulfill p (-L ≤z≤ L) = 0.95.
+```{r}
+# The tails have to be (1-0.95)/2= 0.025
+Llower <- qnorm(0.025)
+Llower
+# Demonstration
+pnorm(-Llower)-pnorm(Llower)
+```
+26.Get by simulation  a sample  n=100  from distribution  N(0,1).
+```{r}
+rnorm(100)
+```
+27.Get by simulation  a sample  n=300  from distribution  N(2,3).
+```{r}
+rnorm(300, 2, 3)
+```
+28.Binomial distribution Let X be binomially distributed  with  n = 60 and  p=0.4. Compute the following: 
+P(X = 24).
+```{r}
+n<-60
+p<-0.4
+dbinom(24,n,p)
+```
+P(X ≤ 24).
+```{r}
+pbinom(24,n,p)
+```
+P(X ≥ 30). 
+```{r}
+pbinom(29,n,p,lower=F)
+```
+P(20 ≤ X ≤ 30).
+```{r}
+pbinom(30,n,p)-pbinom(20,n,p)
+```
+P(20 ≤ X). 
+```{r}
+pbinom(20,n,p)
+```
+P(20 ≤ X or X ≥ 40).
+```{r}
+# 1-(pbinom(40,n,p)-pbinom(20,n,p))??
+pbinom(20,n,p)+pbinom(39,n,p,lower=F)
+```
+P(20 ≤ X and X ≥ 10).
+```{r}
+pbinom(20,n,p)*pbinom(9,n,p,lower=F)
+```
+Compute  the mean and standard  deviation of X. The quantiles  x 0.025, x 0.5, and x 0.975. 
+```{r}
+simulation<-rbinom(1000000, n, p)
+mean(simulation)#mean
+sd(simulation)# standard deviation
+qbinom(0.025, n, p)#x0.025
+qbinom(0.5,n,p)#x0.5
+qbinom(0.975,n,p)#x0.975
+```
+
+29.Standard  Normal. Compute  the following probabilities  and quantiles. 
+P(1.6 < z<2.3).
+```{r}
+pnorm(2.3)-pnorm(1.6)
+```
+P(z< 1.64). 
+```{r}
+pnorm(1.64)
+```
+P(−1.64 < z< −1.02). 
+```{r}
+pnorm(-1.02)-pnorm(-1.64)
+```
+P(0 < z< 1.96).
+```{r}
+pnorm(1.96)-pnorm(0)
+```
+P(-1.96 < z < 1.96). 
+```{r}
+pnorm(1.96)-pnorm(-1.96)
+```
+The quantiles z 0.025, z 0.05, z 0.5, z 0.95, and z 0.975.
+```{r}
+qnorm(0.025)
+qnorm(0.05)
+qnorm(0.5)
+qnorm(0.95)
+qnorm(0.975)
+```
+
+30.MicroRNA. Suppose  that for certain microRNA of size 20 the probability  of a purine is binomially  distributed  with probability  0.7. (From Applied Statistics for Bioinformatics using R) 
+What is the probability  of 14 purines? 
+```{r}
+n<-20
+p<-0.7  
+dbinom(14,n,p)
+
+```
+What is the probability of less than or equal  to 14 purines?
+```{r}
+pbinom(14, n, p)
+```
+What is the probability  of strictly more than  10 purines? 
+```{r}
+pbinom(10, n, p, lower = F)
+```
+By what probability  is of the number  of purines  between  10 and 15? 
+
+```{r}
+
+pbinom(15, n, p)-pbinom(10,n,p)
+```
+
+How many purines  do you expect? In other words: What is the mean  of the distribution? 
+```{r}
+qbinom(0.5,n,p)
+```
+What is the standard  deviation  of the distribution?
+
+Use r commands to draw a random sample of size 1000 microRNA from the population and compare the sample  mean and standard deviation  with that of the population. 
+```{r}
+simulation<-rbinom(1000, n,p)
+mean(simulation)
+sd(simulation)
+```
+31.Assume  that the average  extinction rate in mammals  is 2 species/10  years. If the last extinct species was 3 years ago, which is the probability  of the next extinct species occurs within  the next 2 years? 
+```{r}
+rate <- 2/10
+dexp(2, rate)
+```
+
+## Explanation 23/10
+With this function, we can see that the interval of confidence will be larger as we increase the probability of having the real mu. 
+```{r}
+CIz <- function(xmean,alpha,n){
+CIhalf = qnorm(alpha/2) * 1/sqrt(n);
+CI = c(xmean-CIhalf, xmean+CIhalf);
+return(CI)
+}
+# An interval of confidence with 90% of probability to have mu inside  (considering x = 0, with n = 100)
+CIz (0,0.1,100)
+# An interval of confidence with 95% of probability 
+CIz (0,0.05,100)
+
+```
+
+Comparing t and normal
+```{r}
+x <- seq(-8,8,by=.1)
+{plot(x,dnorm(x),type='l',ylab="",main="df=2")
+lines(x,dt(x,df=2),lty=2,col=2)
+lines(x,dt(x,df=3),lty=2, col=3)
+lines(x,dt(x,df=4),lty=2, col=4)}
+```
+
+Example: estimate the condifence interval for alpha = 0.05
+```{r}
+
+data<- c(0.467, 0.645, 0.868, 0.472, 0.844, 0.879, 0.405, 0.604, 0.787, 0.449, 0.772,0.780)
+CIz(mean(data), 0.05, length(data))
+
+```
+
+Test the hipotesis:
+H0: the mu is 79
+The population is >30 and the mean is 74
+variance=225; standard deviation = sqrt(225)
+```{r}
+z<-(74-79)/(sqrt(225)/sqrt(42))
+pnorm(z)
+qnorm(0.975)
+
+
+# t de student
+
+z<-(74-79)/(sqrt(225)/sqrt(42))
+pnorm(z)
+```
+
+T test example
+```{r}
+
+classTraits<-read.table("http://bioinformatica.uab.cat/base/documents/bioinformaticsintranet1718/databla/CLASS_TRAITS_large.txt",
+header=T)
+
+classTraitsplus <-read.table("http://bioinformatica.uab.cat/base/documents/bioinformaticsintranet1718/databla/CLASS_TRAITS_large_plus.txt ", header=T)
+
+ with(classTraits, t.test(height[gender =="F"], height[gender=="M"]))
+ attach(classTraits) #with the attach function
+ Females = classTraits[which(gender =="F"),]
+ Males = classTraits[which(gender =="M"),]
+ t.test (Females[,4], Males[,4])
+ boxplot(Females[,4], Males[,4]) 
+```
+
+ANOVA test example
+```{r}
+ anova(lm(height ~ eye_color, data = classTraits))
+ anova(lm(height ~ gender, data = classTraits))
+  # barlett.test(height ~ gender, data = classTraits)
+# Simultaneous factors
+
+anova(lm(height ~ eye_color+gender, data = classTraits))
+anova(lm(height ~ eye_color*gender, data = classTraits)) # With interaction between causes
+
+
+
+# open("Statistical inference_Part_III2017_10_20D17_5_39 (1).pdf")
+```
+

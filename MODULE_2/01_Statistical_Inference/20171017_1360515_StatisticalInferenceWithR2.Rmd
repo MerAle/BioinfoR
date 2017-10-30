@@ -1,0 +1,87 @@
+---
+title: "Statistical inference - R exercises"
+author: "Ruth Gómez"
+date: "October 17, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Data exploration
+
+#### 1.Practice data exploration  with the class collaborative data set CLASS\_TRAITS(a larger dataset with data of previous students is in CLASS_TRAITS  large).
+
+```{r}
+# The two datasets are downloaded and merged
+class_1718 <- read.table("http://bioinformatica.uab.cat/base/documents/bioinformaticsintranet1718/databla/CLASS_TRAITS.txt", header = T )
+class_old <- read.table("http://bioinformatica.uab.cat/base/documents/bioinformaticsintranet1617/databla/CLASS_TRAITS_large.txt", header=T)
+classTraits <- merge(class_1718, class_old, all = T)
+rm(class_1718, class_old)
+
+# Variable identification
+str(classTraits)
+
+# Data cleaning
+# Degree
+levels(classTraits$degree)[grep('^[b,B]iochem*', levels(classTraits$degree) )] <- 'Biochemistry'
+levels(classTraits$degree)[grep('^[b,B]iolo*', levels(classTraits$degree) )] <- 'Biology'
+levels(classTraits$degree)[grep('^[b,B]iotech*', levels(classTraits$degree) )] <- 'Biotechnology' # Groups biotechnology and biotechemistry
+levels(classTraits$degree)[grep('^[b,B]iomed*', levels(classTraits$degree) )] <- 'Biomedical_Sciences' # Groups biomedical sciences and biomedicine
+levels(classTraits$degree)[grep('^[m,M]icro*', levels(classTraits$degree) )] <- 'Microbiology'
+levels(classTraits$degree)[grep('Physics*', levels(classTraits$degree) )] <- 'Biophysics'
+levels(classTraits$degree)[c(grep('[c,C]omputer', levels(classTraits$degree)),grep('Informatician', levels(classTraits$degree)))] <- 
+'Computer_Sciences'  # Groups computer science, computer vision, informatician
+levels(classTraits$degree)[grep('mol', levels(classTraits$degree) )] <- 'Molecular_Biology'
+
+# ABO
+  levels(classTraits$ABO)[grep('[0,o,O]', levels(classTraits$ABO) )] <- 'O'
+  
+# Hair color
+  levels(classTraits$hair_color)[grep('[B,b]lack', levels(classTraits$hair_color) )] <- 'black'
+ levels(classTraits$hair_color)[grep('[B,b]lond', levels(classTraits$hair_color) )] <- 'blonde'
+  levels(classTraits$hair_color)[grep('redhead', levels(classTraits$hair_color) )] <- 'red'
+  levels(classTraits$hair_color)[grep('brown', levels(classTraits$hair_color) )] <- 'brown'
+  
+# Eye color
+   levels(classTraits$eye_color)[c(grep('[b,B]rown', levels(classTraits$eye_color) ),grep('[b,B]lack', levels(classTraits$eye_color) ))] <- 'brown' # Grouping black and brown eyes
+# There  is one individual that has marked their eyes as 'blonde', so it will be assumed that there was a misplacement of the eyes and hair color characters, and they will be swapped
+  classTraits[which(classTraits$eye_color == 'blonde'),c('hair_color', 'eye_color')]<-
+    classTraits[which(classTraits$eye_color == 'blonde'),c('eye_color', 'hair_color')]
+    
+classTraits$eye_color<-factor(classTraits$eye_color)
+    
+# Tongue_rolling
+  levels(classTraits$tongue_rolling)[c(grep('[n,N]', levels(classTraits$tongue_rolling) ),grep('[b,B]lack', levels(classTraits$eye_color) ))] <- 'no' 
+  levels(classTraits$tongue_rolling)[c(grep('[y, Y]', levels(classTraits$tongue_rolling) ),grep('[b,B]lack', levels(classTraits$eye_color) ))] <- 'yes'  
+
+# Univariate analysis in continuous variables (height and weight)
+
+sapply(classTraits[,c("height", "weight")], summary)
+
+library(ggplot2)
+library(gridExtra)
+p1<-ggplot(classTraits)+geom_boxplot(aes(x = gender , y = height , fill = gender))+labs(title  ="Height analysis" , y = "Height (cm)", x = "Gender")+ theme(plot.title = element_text(hjust = 0.5), legend.position = 'none')
+p2<-ggplot(classTraits)+geom_boxplot(aes(x = gender , y = weight,fill = gender))+labs(title = "Weight analysis", y = "Weight (kg)", x = "Gender")+ theme(plot.title = element_text(hjust = 0.5))
+grid.arrange(p1,p2, nrow = 1)
+
+# Distribution of categorical variables, The NAs are not counted in the proportions
+sapply(classTraits[,c("gender", "degree", "ABO", "Rh", "hair_color", "eye_color", "tongue_rolling")], FUN = function(x){table(x)/sum(table(x))})
+
+# Bi variate analysis on continuous variables, with both height and weight recorded
+p<-ggplot(classTraits, aes(height, weight, color = gender)) + geom_point() 
+p3 <-p+ facet_grid(.~gender)
+grid.arrange(p3, p, ncol = 1)
+
+var(classTraits[,c("height", "weight")], use= 'complete.obs')
+cor(classTraits[,c("height", "weight")], use= 'complete.obs')
+
+# Bi variate analysis deleting outliers
+
+subset<-classTraits[which ((classTraits$gender == "M" & classTraits$height %in% c(160:190) & classTraits$weight < 91) | (classTraits$gender == "F" & classTraits$weight<80)),c("height", "weight")]
+
+var(subset)
+cor(subset)
+
+p5<-ggplot(classTraits, aes(x = eye_color))+geom_bar( aes(fill = hair_color ), position = 'stack')
+p5
+```
