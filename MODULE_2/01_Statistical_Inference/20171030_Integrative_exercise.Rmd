@@ -40,7 +40,7 @@ The biological hypotheses (random distribution of important genes vs. chromosome
 
 _Design an experiment that controls or randomizes the confounding variables._
 
-The general properties of the human chromosomes are published in [source]. An unbeatable source for the number of diseases for each chromosome is the OMIM database, because it has the information from the peer-reviewed biomedical literature updated and curated, resulting in reliable descriptions of human diseases and their most probably causing genes. It provides tools as genome coordinate searching and thesaurus-enhanced search term options. 
+A priori, the chromosomes included in the study are autosomal chromosomes and sex human chromosomes.  Their general properties are published in [source]. An unbeatable source for the number of diseases for each chromosome is the OMIM database, because it has the information from the peer-reviewed biomedical literature updated and curated, resulting in reliable descriptions of human diseases and their most probably causing genes. It provides tools as genome coordinate searching and thesaurus-enhanced search term options. 
 
 A possibly confounding variable is the length of the genes, because there is more space to suffer mutations. To assess that this is not affecting the analysis, it will be analised the correlation between the number of genes and the total exon length in bp. If they are not significatively correlated, the study will have to be repeated for both measures (gene and exon length) and the results compared. 
 
@@ -77,26 +77,20 @@ Other confounding variables that can not be controlled are those related to the 
 
 _Based on the number of variables, the kinds of variables, the expected fit to the parametric assumptions, and the hypothesis to be tested, choose the best statistical test to use._
 
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3900058/
-
-As we have one numeric variable and multiple categorical variables, we expect a fitness to the parametric assumptions and the expected number is more than 5 for each chromsome, we can do a goodness of fit Xisquared test. 
+We will have a list of number of observations (diseases) for each category in a nominal variable (chromosome), enough data to take a large sample (>100 observations, >5 observations per category), and we want to test the adequation of our data to an expected distribution, so in this case the best statistical test would be a Chi-square test of goodness-of-fit. http://www.biostathandbook.com/chigof.html. It is also expected a fitness to the parametric assumptions but it's not mandatory, so it won't be tested. 
 
 _If possible, do a power analysis to determine a good sample size for the experiment._
 
-* Power analysis (approximation)
+As our data is available before the study, a post hoc power analysis will be performed after the data acquisition and cleaning to determine the best sample size. 
 
-_Do the experiment._
+_Data acquisition_
 
-* Arrange data*
-* Data sampling*
 
 ```{r}
 
+# BASIC TABLE: 
 
-# BASIC TABLE
-#  variables) of non-trivial variables of the genome table. 
 link <- 'http://mscbioinformatics.uab.cat/base/documents/bioinformaticsintranet1718/summary_human_genome2015_10_18D22_6.txt'
-
 header<-read.table(link, nrows = 1, stringsAsFactors = F)
 
 # there is a missing column name, as we can see in https://www.ncbi.nlm.nih.gov/genome/51?genome_assembly_id=214366
@@ -113,8 +107,13 @@ t[,6:13]<-apply(t[,6:13], 2, function(x){
   as.numeric(x)
   })
 
-# DISEASES
+# Only the needed data is selected
+t<-t[,]
+
+# DISEASES 
+
 t$Number_Diseases<-c(1638,1038,898,646,749,955,774,585,622,612,997,861,308,538,486,675,963,243,1035,427,172,374,848,54, NA, NA)
+
 # EXON
 Basepairs<-read.table('Data/Exon_bases',skip=1, sep = ' ')
 colnames(Basepairs)<-c('Name', 'Total_Bases', 'Exon_Bases')
