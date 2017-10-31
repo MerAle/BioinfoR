@@ -10,13 +10,13 @@ _Abstract_
 
 _Specify the biological question you are asking._
 
-* Genetical diseases are bad
-* They are transmitted through chromosomes
-* Knowing the chromosomical source is useful
-* Are diseases evenly distributed across chromosomes?
-* Population genetics expectations??
+Among the causes of the countless diseases that humans can suffer, genetic causes are ones of the most concerning because they are usually treatable but not fixable/curable and they can be transmitted to our offspring. However, genetic factors of diseases can vary from slight predispositions to totally letal mutations and rearrangements that lead to miscarriages even before the pregnancy is noticeable. When regarded in the Ohta's nearly neutral theory of evolution context, we can consider that these extremely deleterious mutations, which are hardly ever detected nor reported, are in the lower tail of the distribution, and that the mutations inducing slight predispositions are in the slightly deletrious zone. Therefore, what we know as 'genetic disease' must be around the center of the deleterious mutations distribution. 
 
-We don't expect chromosomes with too much important genes, because in such scenario a small mutation anywhere in its sequence would imply an very deletereal mutation, preventing the fixation of that chromosome in the poopulation. We rather expect that genes will have been evenly distributed across the genome during evolution, avoiding to rely too much in one of them. GENE DENSITY
+From now on in this work, if there's no further [clarification], we'll consider as 'mutations' only those that are deleterious or slightly deleterious, and for simplification we assume that they affect a gene (although it is known that some deleterious mutations can affect other regions like enhancers or epigenetic targets). 
+
+The same mutation can be more or less severe depending on the gene that it affects, so we can assume that there are differences in the essentiality of the genes, and that any change can be more or less deleterious according to importance of the gene. Given two chromosomes of equal gene density, it would be more likely to have an extremely deleterious mutation in that with the larger number of important genes. That's why we don't expect chromosomes with a large proportion of important genes, but rather a random distribution of such genes.
+
+In this context, the biological question is: are mutations causing diseases in fact evenly distributed across human chromosomes?
 
 ```{r}
 <!-- Among the causes of the countless diseases that humans can suffer, genetic causes are ones of the most concerning because they are usually treatable but not fixable/curable and they can be transmitted to our offspring. However, genetic factors of diseases can vary from slight predispositions to totally letal mutations and rearrangements that lead to miscarriages even before the pregnancy is noticeable.  -->
@@ -31,33 +31,20 @@ We don't expect chromosomes with too much important genes, because in such scena
 
 <!-- Are diseases evenly distributed across the chromosomes? -->
 
-<!-- The null hipothesis regarding this question is that the number of diseases that a chromosome can be related to depends on the number of genes that ir contains, and the alternate hipothesis is that there are some disease-prone chromosomes. In statistical terms, these two hipothesis can be expressed as H0: all chromosomes are related to a number of diseases that depends exclusively on their number of genes and H1: some chromosmes have more reported diseases than the expected for their number of genes.  -->
-
-<!-- _Put the question in the form of a biological null hypothesis and alternate hypothesis._ -->
-
-<!-- H0: Todos los cromosomas tienen un numero aleatorio de enfermedades en 
-WHY OMIM (PROSfunción de su densidad génica y/o tamaño -->
-<!-- H1: el factor 'cromosoma' también afectal número de enfermedades, y no solo la densidad génica o el tamaño -->
-<!-- _Put the question in the form of a statistical null hypothesis and alternate hypothesis._ -->
-
-<!-- H0: el número de enfermedades por gen está homogéneamente distribuido entre los cromosomas -->
-<!-- h1: hay algunos cromosomas que tienen más enfermedades por gen de lo esperado -->
+<!--  -->
 ```
+ 
+ _Put the question in the form of a null hypothesis and alternate hypothesis._ _Variables selection_
 
-_Variables selection_
-
-* Biological hypothesis
-* Statistical hypothesis
-* Which variables this implies (two options)
-
-<!-- Number of diseases - discrete measure (separated by chromosomes) -->
-<!-- Number of genes - discrete measure (Separated by chromosomes) -->
-<!-- Cromosomes - nominal/ categories -->
+The biological hypotheses (random distribution of important genes vs. chromosomes with a higher deleterious potential) can be tested using as an estimator of important genes the number of diseases that have been reported for each of the chromosomes. It is expected to be proportional to the number of genes in each chromosome, meaning that both measures will follow the same distribution. Therefore, our null statistical hypothesis is that the distribution of diseases across the chromosomes follows the same as the genes, and the alternate hypothesis is that some chromosomes have more (or less) diseases associated than the expected, thus the distributions are different. 
 
 _Design an experiment that controls or randomizes the confounding variables._
 
-* Data sources
-* Confounding variables
+The general properties of the human chromosomes are published in [source]. An unbeatable source for the number of diseases for each chromosome is the OMIM database, because it has the information from the peer-reviewed biomedical literature updated and curated, resulting in reliable descriptions of human diseases and their most probably causing genes. It provides tools as genome coordinate searching and thesaurus-enhanced search term options. 
+
+A possibly confounding variable is the length of the genes, because there is more space to suffer mutations. To assess that this is not affecting the analysis, it will be analised the correlation between the number of genes and the total exon length in bp. If they are not significatively correlated, the study will have to be repeated for both measures (gene and exon length) and the results compared. 
+
+Other confounding variables that can not be controlled are those related to the diseases; for instance rare diseases tend to be less studied that those that affect a wide portion of the population, or the studies are less reliable due to the sample size. In addition, not all kind of mutations, genes and chromosomes are equally easy to study. These factors can be partially randomized by having into account diseases with different amounts of knowledge associated. 
 
 ```{r}
 
@@ -86,9 +73,11 @@ _Design an experiment that controls or randomizes the confounding variables._
 <!--  * Test for structural diseases controlling by size (and number of genes?) * -->
 <!--  * Statistical treatment  * -->
 ```
+
+
 _Based on the number of variables, the kinds of variables, the expected fit to the parametric assumptions, and the hypothesis to be tested, choose the best statistical test to use._
 
-* Explanations and basics of Xisquared
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3900058/
 
 As we have one numeric variable and multiple categorical variables, we expect a fitness to the parametric assumptions and the expected number is more than 5 for each chromsome, we can do a goodness of fit Xisquared test. 
 
@@ -197,7 +186,7 @@ _Apply the statistical test you chose, and interpret the results._
 # 
 # chisq.test(t$Number_Diseases, t$Expected_probs, simulate.p.value = T)
 # chisq.test(t$Number_Diseases, t$Expected_probs)
-# 
+
 # ###
 # 
 # library(pwr)
@@ -231,8 +220,7 @@ Analysis<-rbind(Analysis, Analysis1, Analysis5)
 
 # p<-ggplot(Analysis, aes(x = Name, y = Diseases, color=Group))
 # p+geom_line(group=1)+facet_grid(Group~., scales = 'free')
-# chisq.test(t$Number_Diseases*0.1, p=t$Gene/sum(t$Gene))
-
+chisq.test(t$Number_Diseases*0.01, p=(t$Gene/t$`Size_(Mb)`)/(sum(t$Gene/t$`Size_(Mb)`)))
 
 population<-unlist(apply(t, 1, function(x){
   rep(x[1],x[14] )
@@ -249,7 +237,7 @@ T$mean<-apply(T,1,FUN=function(x){mean(as.numeric(x[2:6]))})
 
 
 Analysis_sam<-data.frame(T[,c("Var1", "mean")], rep('sample'))
-genes<-data.frame(t$Name, t$Gene, rep('Genes'))
+genes<-data.frame(t$Name, t$Gene/t$`Size_(Mb)`, rep('Genes'))
 colnames(Analysis_sam)<-colnames(genes)<-c('Name', 'Diseases', 'Group')
 Analysis<-rbind(Analysis, Analysis_sam, genes)
 
@@ -261,15 +249,15 @@ p+geom_line(group=1)+facet_grid(Group~., scales = 'free')
 library(pwr)
 
  
-effect.size <- ES.w1(t$Gene/sum(t$Gene), t$Number_Diseases/sum(t$Number_Diseases))
+effect.size <- ES.w1((t$Gene/t$`Size_(Mb)`)/(sum(t$Gene/t$`Size_(Mb)`)), t$Number_Diseases/sum(t$Number_Diseases) )
 # effect.size <-0.1
 degrees <- 22
 # 
 pwr.chisq.test(
                w=effect.size,
-               N=1650,            # Total number of observations
+               N=sum(t$Number_Diseases*0.01),            # Total number of observations
                df=degrees,
-               power=0.99,        # 1 minus Type II probability
+               power=0.9,        # 1 minus Type II probability
                sig.level=NULL)    # Type I probability
 # 
 # cor.test(t$Gene, t$Number_Diseases)
@@ -300,3 +288,6 @@ http://seqanswers.com/forums/showthread.php?t=5298
 
 Source NCBI:
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3116565/
+
+BARBADILLA - foto
+https://www.ncbi.nlm.nih.gov/pubmed/28270526
