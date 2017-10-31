@@ -1,56 +1,71 @@
----
+
+* Population genetics expectations---
 title: "Statistical inference"
 author: "Ruth Gómez Graciani"
 date: "30 de octubre de 2017"
 output: html_document
 ---
 
-
-_Introduction_
+_Abstract_
 
 _Specify the biological question you are asking._
 
-Among the causes of the countless diseases that humans can suffer, genetic causes are ones of the most concerning because they are usually treatable but not fixable/curable and they can be transmitted to our offspring. However, genetic factors of diseases can vary from slight predispositions to totally letal mutations and rearrangements that lead to miscarriages even before the pregnancy is noticeable. 
+* Genetical diseases are bad
+* They are transmitted through chromosomes
+* Knowing the chromosomical source is useful
+* Are diseases evenly distributed across chromosomes?
+* Population genetics expectations??
 
-This extremely deleterious mutations are hardly ever detected nor reported.
+We don't expect chromosomes with too much important genes, because in such scenario a small mutation anywhere in its sequence would imply an very deletereal mutation, preventing the fixation of that chromosome in the poopulation. We rather expect that genes will have been evenly distributed across the genome during evolution, avoiding to rely too much in one of them. GENE DENSITY
+
+```{r}
+<!-- Among the causes of the countless diseases that humans can suffer, genetic causes are ones of the most concerning because they are usually treatable but not fixable/curable and they can be transmitted to our offspring. However, genetic factors of diseases can vary from slight predispositions to totally letal mutations and rearrangements that lead to miscarriages even before the pregnancy is noticeable.  -->
+
+<!-- This extremely deleterious mutations are hardly ever detected nor reported. -->
+
+<!-- Assuming that there are differences in the essentiality of the genes (since the same mutation can be more or less severe deppending on the gene that it affects), we expect that the important genes are distributed randomly across the chromosomes, and the same can be applied to the less essential genes, as well as the mutations. Therefore, the source chromosome of a genetic disease is expected to depend only on the number of genes that can have a mutation in that chromosome.  -->
 
 
-Assuming that there are differences in the essentiality of the genes (since the same mutation can be more or less severe deppending on the gene that it affects), we expect that the important genes are distributed randomly across the chromosomes, and the same can be applied to the less essential genes, as well as the mutations. Therefore, the source chromosome of a genetic disease is expected to depend only on the number of genes that can have a mutation in that chromosome. 
+<!-- Why we are counting genes and not space -->
+<!-- ## -->
 
+<!-- Are diseases evenly distributed across the chromosomes? -->
 
-Why we are counting genes and not space
-##
-
-Are diseases evenly distributed across the chromosomes?
-
-The null hipothesis regarding this question is that the number of diseases that a chromosome can be related to depends on the number of genes that ir contains, and the alternate hipothesis is that there are some disease-prone chromosomes. In statistical terms, these two hipothesis can be expressed as H0: all chromosomes are related to a number of diseases that depends exclusively on their number of genes and H1: some chromosmes have more reported diseases than the expected for their number of genes. 
+<!-- The null hipothesis regarding this question is that the number of diseases that a chromosome can be related to depends on the number of genes that ir contains, and the alternate hipothesis is that there are some disease-prone chromosomes. In statistical terms, these two hipothesis can be expressed as H0: all chromosomes are related to a number of diseases that depends exclusively on their number of genes and H1: some chromosmes have more reported diseases than the expected for their number of genes.  -->
 
 <!-- _Put the question in the form of a biological null hypothesis and alternate hypothesis._ -->
 
-<!-- H0: Todos los cromosomas tienen un numero aleatorio de enfermedades en función de su densidad génica y/o tamaño -->
+<!-- H0: Todos los cromosomas tienen un numero aleatorio de enfermedades en 
+WHY OMIM (PROSfunción de su densidad génica y/o tamaño -->
 <!-- H1: el factor 'cromosoma' también afectal número de enfermedades, y no solo la densidad génica o el tamaño -->
 <!-- _Put the question in the form of a statistical null hypothesis and alternate hypothesis._ -->
 
 <!-- H0: el número de enfermedades por gen está homogéneamente distribuido entre los cromosomas -->
 <!-- h1: hay algunos cromosomas que tienen más enfermedades por gen de lo esperado -->
+```
 
 _Variables selection_
 
-Number of diseases - discrete measure (separated by chromosomes)
-Number of genes - discrete measure (Separated by chromosomes)
-Cromosomes - nominal/ categories
+* Biological hypothesis
+* Statistical hypothesis
+* Which variables this implies (two options)
+
+<!-- Number of diseases - discrete measure (separated by chromosomes) -->
+<!-- Number of genes - discrete measure (Separated by chromosomes) -->
+<!-- Cromosomes - nominal/ categories -->
 
 _Design an experiment that controls or randomizes the confounding variables._
 
-The population that will be studied
-Enfermedades:
-IDEAL FORMAT: Number of gene diseases, number of chromosomal diseases, for every chromosome (Mit and Unkown are excluded)
-SOURCE: Disease database (OMIM) https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383985/
-WHY OMIM (PROS): It has updated and curated descriptions of human genes and phenotypes and the relationships between them,  genome coordinate searching and thesaurus-enhanced search term options. Source material for OMIM is the peer-reviewed biomedical literature. 
-CONS in OMIM
-METHOD
-Correct by chunk size?
-Correct by number of appearances in chromosome?
+* Data sources
+* Confounding variables
+
+```{r}
+
+<!-- The experiment is the process of obtainig measurement data, in this case, from databases. The general information about the chromosomes is published in [source]. In addition, the OMIM database is a suitable source of the number of diseases per chromosome, as it has updated and curated descriptions of human genes and phenotypes and the relationships between them, and genome coordinate searching and thesaurus-enhanced search term options. Source material for OMIM is the peer-reviewed biomedical literature.  -->
+
+<!-- I have been able to identify two main cofounding variables: chromosome size/gene density, chromosome ease of study and mutation location ease of study, disease ease of study.  -->
+
+<!-- The chromosome size will be contorlled by using the distribution of the genes across the chromosome as an estimator of the distribution that the number of diseases should have. The ease of study of each chromosome is randomized by having into account all the possible entries intead of only the most complete ones. I can't correct the mutation location, there are some disease that are intergenic, etc, but most of them will have effect in some gene, so it's ok. Also rare diseases are not so widely studied and common diseases not, but it's ok -->
 
 
 <!-- 4148(clinical basis) cs_molecular_basis_exists:TRUE -->
@@ -58,31 +73,34 @@ Correct by number of appearances in chromosome?
 <!-- 148 not mutation (cs_molecular_basis_exists:TRUE) AND NOT (cs_molecular_basis:(mutation OR ( (mutant) OR (variation) OR (mutational) OR (mutant OR mutational OR variation) ) OR ( (variance OR variant) ))) -->
 <!-- c(1,) -->
 
-(tx_molecular_genetics_exists:TRUE) AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial)
+<!-- (tx_molecular_genetics_exists:TRUE) AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial) -->
 
- chromosome_group:A AND tx_molecular_genetics_exists:TRUE AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial)
+<!--  chromosome_group:A AND tx_molecular_genetics_exists:TRUE AND (cs_molecular_basis_exists:TRUE) AND  (cs_molecular_basis:mutation) AND (cs_inheritance_exists:TRUE) AND NOT (cs_inheritance:Mitochondrial) -->
 
-all_entries
+<!-- all_entries -->
 
- 
- * Arrange data*
- * Test for all diseases controlling by size and number of genes *
- * Test for mutational diseases controlling by number of genes *
- * Test for structural diseases controlling by size (and number of genes?) *
- * Statistical treatment  *
- 
+
+<!--  * Arrange data* -->
+<!--  * Test for all diseases controlling by size and number of genes * -->
+<!--  * Test for mutational diseases controlling by number of genes * -->
+<!--  * Test for structural diseases controlling by size (and number of genes?) * -->
+<!--  * Statistical treatment  * -->
+```
 _Based on the number of variables, the kinds of variables, the expected fit to the parametric assumptions, and the hypothesis to be tested, choose the best statistical test to use._
 
-Anovas or ancovas are not suitable because I only have one measure per group. A Kruskall-Wallis? Regression?
+* Explanations and basics of Xisquared
 
+As we have one numeric variable and multiple categorical variables, we expect a fitness to the parametric assumptions and the expected number is more than 5 for each chromsome, we can do a goodness of fit Xisquared test. 
 
 _If possible, do a power analysis to determine a good sample size for the experiment._
 
-Power analysis
+* Power analysis (approximation)
 
 _Do the experiment._
 
 * Arrange data*
+* Data sampling*
+
 ```{r}
 
 
@@ -108,7 +126,6 @@ t[,6:13]<-apply(t[,6:13], 2, function(x){
 
 # DISEASES
 t$Number_Diseases<-c(1638,1038,898,646,749,955,774,585,622,612,997,861,308,538,486,675,963,243,1035,427,172,374,848,54, NA, NA)
-
 # EXON
 Basepairs<-read.table('Data/Exon_bases',skip=1, sep = ' ')
 colnames(Basepairs)<-c('Name', 'Total_Bases', 'Exon_Bases')
@@ -123,9 +140,15 @@ t<-merge(t, Basepairs)
 
 ```
 
+WHY OMIM (PROS
 _Examine the data to see if it meets the assumptions of the statistical test you chose (primarily normality and homoscedasticity for tests of measurement variables). If it doesn't, choose a more appropriate test._
 
-* Descriptive analysis *
+* Descriptive analysis * - search outliers
+* Normality
+* Homoscedasticity *
+* Adequation of the Chisquare test*
+* Resampling *
+* Real power *
 
 ```{r}
 # Univariate analysis in continuous variables (height and weight)
@@ -162,40 +185,115 @@ _Examine the data to see if it meets the assumptions of the statistical test you
 
 _Apply the statistical test you chose, and interpret the results._
 
+* Application of the statistical test*
 ```{r}
-Expected_total<-sum(t$Number_Diseases)/sum(t$Gene)
-t$Expected_probs<-(t$Gene*Expected_total)/sum(t$Number_Diseases)
+# Expected_total<-sum(t$Number_Diseases)/sum(t$Gene)
+# t$Expected_probs<-(t$Gene*Expected_total)/sum(t$Number_Diseases)
+# 
+# chi <-sum(((t$Number_Diseases-(t$Gene*Expected_total))^2)/(t$Gene*Expected_total))
+# df = 22
+# 1-pchisq(chi, 22)
+# 
+# 
+# chisq.test(t$Number_Diseases, t$Expected_probs, simulate.p.value = T)
+# chisq.test(t$Number_Diseases, t$Expected_probs)
+# 
+# ###
+# 
+# library(pwr)
+# 
+# # P0<-t$Expected_probs
+# P0<-t$Gene/sum(t$Gene)
+# P1<- t$Number_Diseases/sum(t$Number_Diseases)
+# 
+# effect.size <- ES.w1(P0, P1)  
+# 
+# degrees <- 529
+# 
+# pwr.chisq.test(
+#                w=effect.size, 
+#                N=sum(t$Number_Diseases),            # Total number of observations
+#                df=529, 
+#                power=NULL,        # 1 minus Type II probability
+#                sig.level=0.05)    # Type I probability
+# 
+# cor.test(t$Gene, t$Number_Diseases)
+# plot(t$Gene, t$Number_Diseases)
 
-chisq.test(t$Number_Diseases, t$Expected_probs, simulate.p.value = T)
+
+# APPLY EXAMPLE
+library(ggplot2)
+Analysis<-data.frame(t$Name, t$Number_Diseases, rep('Original'))
+Analysis1<-data.frame(t$Name, t$Number_Diseases*0.1, rep('01'))
+Analysis5<-data.frame(t$Name, t$Number_Diseases*0.5, rep('05'))
+colnames(Analysis)<-colnames(Analysis1)<-colnames(Analysis5)<-c('Name', 'Diseases', 'Group')
+Analysis<-rbind(Analysis, Analysis1, Analysis5)
+
+# p<-ggplot(Analysis, aes(x = Name, y = Diseases, color=Group))
+# p+geom_line(group=1)+facet_grid(Group~., scales = 'free')
+# chisq.test(t$Number_Diseases*0.1, p=t$Gene/sum(t$Gene))
 
 
-###
+population<-unlist(apply(t, 1, function(x){
+  rep(x[1],x[14] )
+}))
+poptab<-data.frame(table(sample(population, 1000, replace = FALSE)))
+poptab2<-data.frame(table(sample(population, 1000, replace = FALSE)))
+poptab4<-data.frame(table(sample(population, 1000, replace = FALSE)))
+poptab1<-data.frame(table(sample(population, 1000, replace = FALSE)))
+poptab3<-data.frame(table(sample(population, 1000, replace = FALSE)))
+
+T<-cbind(poptab, poptab1, poptab2, poptab3, poptab4)
+T<-T[,c(1,2,4,6,8,10)]
+T$mean<-apply(T,1,FUN=function(x){mean(as.numeric(x[2:6]))})
+
+
+Analysis_sam<-data.frame(T[,c("Var1", "mean")], rep('sample'))
+genes<-data.frame(t$Name, t$Gene, rep('Genes'))
+colnames(Analysis_sam)<-colnames(genes)<-c('Name', 'Diseases', 'Group')
+Analysis<-rbind(Analysis, Analysis_sam, genes)
+
+
+p<-ggplot(Analysis, aes(x = Name, y = Diseases, color=Group))
+p+geom_line(group=1)+facet_grid(Group~., scales = 'free')
+
 
 library(pwr)
 
-# P0<-t$Expected_probs
-P0<-t$Gene/sum(t$Gene)
-P1<- t$Number_Diseases/sum(t$Number_Diseases)
-
-effect.size <- ES.w1(P0, P1)  
-
-degrees <- length(P0) - 1
-
+ 
+effect.size <- ES.w1(t$Gene/sum(t$Gene), t$Number_Diseases/sum(t$Number_Diseases))
+# effect.size <-0.1
+degrees <- 22
+# 
 pwr.chisq.test(
-               w=effect.size, 
-               N=578,            # Total number of observations
-               df=degrees, 
-               power=NULL,        # 1 minus Type II probability
-               sig.level=0.05)    # Type I probability
+               w=effect.size,
+               N=1650,            # Total number of observations
+               df=degrees,
+               power=0.99,        # 1 minus Type II probability
+               sig.level=NULL)    # Type I probability
+# 
+# cor.test(t$Gene, t$Number_Diseases)
+# plot(t$Gene, t$Number_Diseases)
 
-cor.test(t$Gene, t$Number_Diseases)
-plot(t$Gene, t$Number_Diseases)
+library(reshape2)
+# 
+t$Gene_prop<-t$Gene/sum(t$Gene)
+t$Dis_prop<-t$Number_Diseases/sum(t$Number_Diseases)
+Pl<-melt(t[, c(1,17,18)])
+
+ggplot(Pl, aes(x=Name, y = value, fill=variable))+geom_bar(position = 'dodge', stat = 'identity')
+qqplot(t$Gene_prop, t$Dis_prop)
+
+boxplot(t$Gene_prop/t$Dis_prop)
+t$Ratio<-t$Gene_prop/t$Dis_prop
 ```
-* Kruskal walis *
-
+* According to the expectations*
+ 
 _Communicate your results effectively, usually with a graph or table._
 
-* Graph *
+* Graphs and tables *
+
+_Sources_
 
 Exon bases table source: HG19
 http://seqanswers.com/forums/showthread.php?t=5298
