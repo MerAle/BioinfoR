@@ -7,23 +7,73 @@ use strict;
 # Date: 201711.02
 # Description: Testing Perl possibilities - first lecture exercise
 
-1.Numbers: integers, floats, hexadecimal. 
+print "Hello, user. In this script we'll learn about Perl programming\n\n";
 
-2.Strings. 
+# 1. Numbers: integers, floats, hexadecimal. 
 
-3.Arrays. Including automatic 
-extension and range 
-selection
-. 
-4.
-Interpolation
-: of scalars and arrays. 
-5.
-Hashes
-. Defined with fat commas. 
-6.
-Operators
-. Numeric and strings. 
+my $number_int = 3;
+my $number_fl = 3.0003;
+my $number_hex = '0xAf';
+
+print "FIRST LESSON: there are different kind of numbers:
+  \n\t This is an integer: $number_int 
+  \n\t This is a float: $number_fl 
+  \n\t This is an hexadecimal: $number_hex, but it has to be interpreded to ".hex $number_hex."\n\n";
+
+# 2. Strings. 
+
+my $string = 'Hello, this is a string named \$string';
+
+print "SECOND LESSON: text is also accepted: \n\t $string \n\n";
+
+# 3. Arrays. Including automatic extension and range selection.
+
+my @array = ("A","C","T","G");
+my $last_el = "U";
+
+print "THIRD LESSON: we can store scalars into arrays: 
+  \n\t Here we get access to the first element in te array: $array[0] 
+  \n\t Now the first to the third elements: @array[0..2]
+  \n\t Here we have the entire array: @array";
+push(@array, $last_el);
+print "
+  \n\t We can also include new scalars, like $last_el, to the end with push: @array";
+unshift(@array, $last_el);
+print "
+  \n\t and to the head of the array with unshift: @array
+  \n\t If you want to reverse that, you only have to execute pop or shift!";
+my @array_rev = reverse(@array);
+print "
+  \n\t Finally, you can have your array reversed: @array_rev \n\n";
+  
+# 4. Interpolation: of scalars and arrays. 
+
+print "FOURTH LESSON: In the previous statements we have been interpolating scalars and arrays\n\n";
+
+#5.Hashes. Defined with fat commas. 
+
+my %Type = ("A" => "Purine", "G" => "Purine", "C" => "Pirimidine", "T" => "Pirimidine");
+
+print "FIFTH LESSON: We can associate values to keys and access them easily:
+  \n\t The raw hash doesn't make any sense: ";
+  print %Type;
+print "\n\t But we can print the hash in a visible way: 
+	\n\t\t T: $Type{'T'}
+	\n\t\t A: $Type{'A'}
+	\n\t\t G: $Type{'G'}
+	\n\t\t C: $Type{'C'}\n\n";
+
+# 6. Operators. Numeric and strings. 
+
+my $string_cont = " and it was updated with an += operator";
+$string += $string_cont;
+$number_int = $number_int * 1000;
+print "SIXTH LESSON: Operators update our values fastly:
+  \n\t Do you remember our first string? It has evolved!: $string
+  \n\t And the first integer we saw has been multiplied by 1000!: $number_int\n\n";
+
+
+
 7.
 Assignments
 . Operators and List assignments. 
