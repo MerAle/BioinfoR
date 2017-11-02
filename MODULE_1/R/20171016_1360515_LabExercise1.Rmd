@@ -280,7 +280,7 @@ Z2[which(Z1 < 0)] <- -1
 #### 30- Now	we	are	going	to	import	a	data	file:plants.csv	and	use	read.table()function	to	store	the	new	table	in	an	object	called	plants
 
 ```{r comment=''}
-plants <- read.table("plants2017_10_13D19_4_42 (1).csv", sep = ",")
+plants <- read.table("Data/plants2017_10_13D19_4_42 (1).csv", sep = ",")
 ```
 
 #### 31- How	do	you	find	the	rows	and	columns	of	the	variable	plants?	And	the size	in	bytes?

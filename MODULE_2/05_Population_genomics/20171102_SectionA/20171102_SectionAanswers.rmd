@@ -1,0 +1,34 @@
+---
+title: "SECTION A. NEUTRAL EVOLUTION "
+author: "Ruth Gómez Graciani"
+date: "November 2nd, 2017"
+output:
+ pdf_document: default
+---
+
+\begin{center}\includegraphics[width=375pt]{Img_mu5.png}\end{center}
+
+
+\begin{center}\includegraphics[width=375pt]{Img_mu4.png}\end{center}
+
+
+
+**a. Does the number of new mutations arising in the population each generation depend on the population size (N)? On the effective population size (Ne)? On the neutral mutation rate ($\mu$)? **
+
+The number of new mutations depends only on the population size (N) and on the neutral mutation rate ($\mu$). The effective population size does not affect, because the mutations per generation come form 2N$\mu$.
+
+**b. Does the fixation probability of a new neutral mutation depend on the population size (N)? On the effective population size (Ne)? On the neutral mutation rate ($\mu$)? **
+
+The fixation probability depends only on the population size (N), the effective population size (Ne) and the neutral mutation rate ($\mu$) are not involved, because the fixation probability is defined as 1/2N. 
+
+**c. Does the rate of neutral evolution depend on the population size (N)? On the effective population size (Ne)? On the neutral mutation rate ($\mu$)?**
+
+The rate of evolution is defined as the product of the new mutations per generation and their probability of fixation. As seen before, none of them depends on the effective population size (Ne), so the rate of evolutio doesn’t either. In addition, in this product the population size is neutralized, so actually the rate of evolution is $\mu$. 
+
+**d. Does the number of neutral mutations fixed in $10^6$ generations depend on the population size (N)? On the effective population size (Ne)? On the neutral mutation rate ($\mu$)?**
+
+The rate of evolution is the number of substitutions per generation, this meand that to know what will happen in $10^6$ generations we only need to multiply the rate by the number of generations. Knowing that actually the rate of evolution is $\mu$, the number of mutations fixed in ‘x’ generations will depend only on $\mu$. 
+
+**e. Does the average time to fixation of a new neutral mutation depend on the population size (N)?  the effective population size (Ne)? On the neutral mutation rate ($\mu$)? **
+
+The average time to fixation is 4*Ne, so it does not depend on the neutral mutation rate ($\mu$) nor the population size (N). 
