@@ -1,0 +1,121 @@
+000 #!/usr/bin/perl
+001 
+002 use warnings;
+003 use strict;
+004 
+005 # Author: Ruth Gómez Graciani
+006 # Date: 201711.02
+007 # Description: Testing Perl possibilities - first lecture exercise
+008 
+009 print "Hello, user. In this script we'll learn about Perl programming\n\n";
+010 
+011 # 1. Numbers: integers, floats, hexadecimal. 
+012 
+013 my $number_int = 3;
+014 my $number_fl = 3.0003;
+015 my $number_hex = '0xAf';
+016 
+017 print "FIRST LESSON: there are different kind of numbers:
+018   \n\t This is an integer: $number_int 
+019   \n\t This is a float: $number_fl 
+020   \n\t This is an hexadecimal: $number_hex, but it has to be interpreded to ";
+021 print hex $number_hex;
+022 print "\n\n";
+023 
+024 # 2. Strings. 
+025 
+026 my $string = 'Hello, this is a string named $string';
+027 
+028 print "SECOND LESSON: text is also accepted: 
+029 	\n\t $string \n\n";
+030 
+031 # 3. Arrays. Including automatic extension and range selection.
+032 
+033 my @array = ("A","C","T","G");
+034 
+035 print "THIRD LESSON: we can store scalars into arrays: 
+036   \n\t Here we get access to the first element in te array: $array[0] 
+037   \n\t Now the first to the third elements: @array[0..2]
+038   \n\t Here we have the entire array: @array";
+039 my @array_rev = reverse(@array);
+040 print "
+041   \n\t Finally, you can have your array reversed: @array_rev \n\n";
+042   
+043 # 4. Interpolation: of scalars and arrays. 
+044 
+045 print "FOURTH LESSON: In the previous statements we have been interpolating scalars and arrays\n\n";
+046 
+047 #5.Hashes. Defined with fat commas. 
+048 
+049 my %Type = ("A" => "Purine", "G" => "Purine", "C" => "Pirimidine", "T" => "Pirimidine");
+050 
+051 print "FIFTH LESSON: We can associate values to keys and access them easily:
+052   \n\t The raw hash doesn't make any sense: ";
+053   print %Type;
+054 print "\n\n\t But we can print the hash in a visible way: 
+055 	\n\t\t T: $Type{'T'}
+056 	\n\t\t A: $Type{'A'}
+057 	\n\t\t G: $Type{'G'}
+058 	\n\t\t C: $Type{'C'}\n\n";
+059 
+060 # 6. Operators. Numeric and strings. 
+061 
+062 my $string_cont = " and it was updated with an += operator";
+063 $string .= $string_cont;
+064 $number_int *= 1000;
+065 print "SIXTH LESSON: Operators update our values fastly:
+066   \n\t Do you remember our first string? It has evolved!: \n $string
+067   \n\t And the first integer we saw has been multiplied by 1000!: $number_int\n\n";
+068 
+069 # 7. Assignments. Operators and List assignments. 
+070 
+071 my ($a, $b, $c, $d) = ('First is ', 'Second is ', 'Third is ', 'Fourth is ');
+072 print "SEVENTH LESSON: We can make our variables all at once: 
+073 	\n\t These variables were made with a list assignment: \n\t $a, $b, $c, $d
+074 	\n\t But they lack information!! we can use a .= operator to improve them: \n\t";
+075 
+076 $a .= 'a';$b .= 'b';$c .= 'c';$d .= 'd';
+077 
+078 print "$a, $b, $c, $d \n\n";
+079 
+080 # 8. Conditional execution. 
+081 
+082 print "EIGTH LESSON: The program can obey our desires with conditionals:
+083 	\n\t Do you remembrer $number_int? Now we will print it only if it's larger than 1000: \n";
+084 
+085 if ($number_int > 1000)
+086 	{
+087 	print "\n\t$number_int succeeded!";
+088 	} else {
+089 	print "\n\t This number is too small :(";	
+090 	}
+091 
+092 
+093 # 9. Loops. Foreach and while. 
+094 
+095 print "\n\nNINTH LESSON: We can repeat our orders:
+096 	\n\t Remember the hash printing? It was awfully manual, we can repeat it with a loop: \n";
+097 
+098 foreach my $key (keys %Type) {
+099 	print "\n\t\t $key: $Type{$key}";
+100 }
+101 
+102 print "
+103 	\n\t That is much shorter to write!\n\n";
+104 
+105 # 10. Stacks
+106 
+107 my $last_el = "U";
+108 
+109 print "TENTH LESSON: Stacks
+110 	\n\tDo you remember the array? @array";
+111 
+112 push(@array, $last_el);
+113 print "
+114   \n\t We can include new scalars, like $last_el, to the end with push: @array";
+115 unshift(@array, $last_el);
+116 print "
+117   \n\t and to the head of the array with unshift: @array
+118   \n\t If you want to reverse that, you only have to execute pop or shift!\n";
+119 
+120 
