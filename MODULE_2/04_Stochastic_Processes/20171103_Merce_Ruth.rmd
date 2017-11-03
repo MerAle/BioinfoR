@@ -1,0 +1,22 @@
+---
+title: "Untitled"
+author: "Ruth Gómez Graciani"
+date: "3 de noviembre de 2017"
+output: pdf_document
+---
+ Download Zika virus (NC_012532.1).  Fit its genoma sequence to a Markov chain model, estimating its transition probability matrix.
+
+- Take the sequence of Dengue virus (NC_001477) from position 101 to 200 (this is a chunk of length 100). Suppose now that you don’t know whether this sequence belongs to Zica or Dengue virus (of course, you know it!). Decide using the log-likelihood method to which virus this sequence belongs.
+
+-  Fit the Zica virus sequence to a two second order Markov chain model. Compare the results with respect a simple Markov chain model.  
+
+       Please, comment the results and be creative!
+```{r , message = FALSE}
+
+
+FAS<-read.fasta('sequence.fasta')
+
+Zika<-FAS[[2]]
+
+
+```
