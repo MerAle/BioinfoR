@@ -13,10 +13,56 @@ output: pdf_document
        Please, comment the results and be creative!
 ```{r , message = FALSE}
 
+library(seqinr)
 
 FAS<-read.fasta('sequence.fasta')
 
 Zika<-FAS[[2]]
+a=count(Zik,2) #count dinucleotides
+c=matrix(a,4,4,byrow=TRUE,dimnames=list(c("A","C","G","T"),c("A","C","G","T"))) #create matrix, name rows and columns
+c[,]/(c[,1]+c[,2]+c[,3]+c[,4]) #obtain frequencies dividing each count for the sum of each row.
 
+Den<-FAS[[1]]
+q=count(Den,2)
+c=matrix(q,4,4,byrow=TRUE,dimnames=list(c("A","C","G","T"),c("A","C","G","T")))
+c[,]/(c[,1]+c[,2]+c[,3]+c[,4])
+
+
+
+#aconseguir taula trans per ordre superior
+xt=factor(Zik[3:n])
+xt_1=factor(Zik[2:(n-1)])
+xt_2=factor(Zik[1:(n-2)])
+cts=table(xt_1:xt_2,xt)
+cts[,]/(cts[,1]+cts[,2]+cts[,3]+cts[,4])
+
+# k=0
+n=length(Zik);par=3
+c=count(Zik,1)
+p=count(Zik,1,freq=T)
+BIC0=-2*sum(c*log(p))+par*log(n)
+print(BIC0)
+
+#k=1
+n=length(Zik)-1;par=12
+a=count(Zik,2)
+c=matrix(a,4,4,byrow=TRUE,dimnames=list(c("A","C","G","T"),c("A","C","G","T")))
+p=c[,]/(c[,1]+c[,2]+c[,3]+c[,4])
+BIC1=-2*sum(c*log(p))+par*log(n)
+print(BIC1)
+
+#k=2
+n=length(Zik)-2;par=48
+c=table(xt_1:xt_2,xt)
+p=c[,]/(c[,1]+c[,2]+c[,3]+c[,4])
+BIC2=-2*sum(c*log(p))+par*log(n)
+print(BIC2)
+
+if(BIC0<BIC1 && BIC0<BIC2){
+ print('Binomial Model')}
+if(BIC1<BIC0 && BIC1<BIC2){
+ print('Simple Markov chain')}
+if(BIC2<BIC1 && BIC2<BIC1){
+ print('2n Order Markov chain')}
 
 ```
